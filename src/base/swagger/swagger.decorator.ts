@@ -9,6 +9,8 @@ import {
   ApiExtraModels,
   ApiOkResponse,
   getSchemaPath,
+  ApiHeaderOptions,
+  ApiHeader,
 } from '@nestjs/swagger';
 import { PaginatedMeta, PaginatedResult } from './pagination.schema';
 
@@ -52,7 +54,11 @@ export const ApiUpdateManyOperation = createApiOperation({
 });
 
 export function ApiTagAndBearer(...tags: string[]) {
-  return applyDecorators(ApiBearerAuth(), SwgApiTag(...tags));
+  return applyDecorators(
+    ApiLanguageHeader(),
+    ApiBearerAuth(),
+    SwgApiTag(...tags),
+  );
 }
 
 export function ApiResponses(tags: ApiResponseOptions[]) {
@@ -75,10 +81,10 @@ export const ApiPaginatedResponse = <TModel extends Type<any>>(
                 type: 'array',
                 items: { $ref: getSchemaPath(model) },
               },
-              pagination : {
-                type : 'object',
-                items : { $ref : getSchemaPath(PaginatedMeta)}
-              }
+              pagination: {
+                type: 'object',
+                items: { $ref: getSchemaPath(PaginatedMeta) },
+              },
             },
           },
         ],
@@ -86,3 +92,29 @@ export const ApiPaginatedResponse = <TModel extends Type<any>>(
     }),
   );
 };
+
+export function ApiWorkPlaceHeader(
+  header?: ApiHeaderOptions,
+): MethodDecorator & ClassDecorator {
+  return applyDecorators(
+    ApiHeader({
+      description: 'Không gian làm việc',
+      name: 'Trung Bin',
+      required: true,
+      ...header,
+    }),
+  );
+}
+
+export function ApiLanguageHeader(
+  header?: ApiHeaderOptions,
+): MethodDecorator & ClassDecorator {
+  return applyDecorators(
+    ApiHeader({
+      description: 'Language {string} : ngôn ngữ',
+      name: 'x-ngôn ngữ',
+      enum: ['vi', 'en'],
+      ...header,
+    }),
+  );
+}

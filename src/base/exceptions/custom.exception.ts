@@ -34,3 +34,33 @@ export class ConflictException extends HttpException {
     super({ success: false, message }, HttpStatusCode.Conflict);
   }
 }
+
+export class ForbiddenException extends HttpException {
+  constructor(message: string = 'Forbidden') {
+    super({ success: false, message }, HttpStatusCode.Forbidden);
+  }
+}
+
+export class Unauthorized extends HttpException {
+  constructor(message: string = 'Authorized') {
+    super({ success: false, message }, HttpStatusCode.Unauthorized);
+  }
+}
+
+export class MethodNotAllowed extends HttpException {
+  constructor(message: string = 'Method Not Allowed') {
+    super({ success: false, message }, HttpStatusCode.MethodNotAllowed);
+  }
+}
+
+export class NotAcceptable extends HttpException {
+  constructor(message: string = 'Not Acceptable') {
+    super({ success: false, message }, HttpStatusCode.NotAcceptable);
+  }
+}
+
+export class TooManyRequests extends HttpException {
+  constructor(message: string = 'Too Many Requests') {
+    super({ success: false, message }, HttpStatusCode.TooManyRequests);
+  }
+}

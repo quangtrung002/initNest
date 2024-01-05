@@ -31,9 +31,10 @@ import { QueryUserDto } from '../dtos/query_pagination.dto';
 import { UserEntity } from '../entities/user.entity';
 import { Roles } from 'src/base/authorization/role/role.decorator';
 import { RoleGroup } from 'src/base/authorization/role/role.enum';
+import { RoleGuard } from 'src/base/authorization/role/role.guard';
 
 @ApiTagAndBearer('Tài khoản cá nhân')
-@UseGuards(JwtAuthGuard)
+@UseGuards(JwtAuthGuard, RoleGuard)
 @UseInterceptors(ClassSerializerInterceptor)
 // @ApiExtraModels(PaginatedMeta)
 @ApiResponses([{ status: 403, description: 'Access role: Admin' }])

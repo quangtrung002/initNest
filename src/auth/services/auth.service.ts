@@ -96,7 +96,9 @@ export class AuthService {
     const user: UserEntity = await this.validateUser(email, password);
     const errorMsg = await this._loginError(user);
     if (errorMsg) throw new BadRequestException(errorMsg);
-
+    user.refreshUav();
+    user.save();
+    
     return await this.createPayload(user);
   }
 

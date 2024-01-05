@@ -15,9 +15,10 @@ export class RoleGuard implements CanActivate {
     if (!roles?.length) {
       return true;
     }
-
+    // return false
     const { user } = context.switchToHttp().getRequest();
     console.log(user)
+
     if (user.role === RoleGroup.SuperAdmin) {
       return true;
     }
