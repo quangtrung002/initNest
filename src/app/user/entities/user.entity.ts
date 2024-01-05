@@ -7,6 +7,7 @@ import * as bcrypt from 'bcrypt';
 import { AUTH_VERSION_DIV } from '../constants/user.constants';
 import { config } from 'src/base/configs/config.service';
 import { Role } from 'src/base/authorization/role/role.enum';
+import { ArticleEntity } from 'src/app/article/entities/article.entity';
 
 @Entity('users')
 export class UserEntity extends BaseEntity {
@@ -31,7 +32,7 @@ export class UserEntity extends BaseEntity {
     default: Role.User,
   })
   role: string;
-  
+
   @ApiHideProperty()
   @Exclude()
   @Column({
@@ -63,6 +64,9 @@ export class UserEntity extends BaseEntity {
 
   @OneToMany(() => CodeEntity, (codes) => codes.user)
   codes: CodeEntity[];
+
+  @OneToMany(() => ArticleEntity, (articles) => articles.user)
+  articles: ArticleEntity[];
 
   refreshUav(willSave: boolean = false) {
     this.uav = new Date().getTime() % AUTH_VERSION_DIV;

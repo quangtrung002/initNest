@@ -4,9 +4,9 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
 import { UserModule } from './app/user/user.module';
 import { CodeModule } from './app/code/code.module';
-import { APP_GUARD, APP_PIPE } from '@nestjs/core';
+import { APP_PIPE } from '@nestjs/core';
 import { MailModule } from './base/mail/mail.module';
-import { RoleGuard } from './base/authorization/role/role.guard';
+import { ArticleModule } from './app/article/article.module';
 
 @Module({
   imports: [
@@ -29,16 +29,13 @@ import { RoleGuard } from './base/authorization/role/role.guard';
     AuthModule,
     UserModule,
     CodeModule,
+    ArticleModule
   ],
   providers: [
     {
       provide: APP_PIPE,
       useClass: ValidationPipe,
-    },
-    {
-      provide: APP_GUARD,
-      useClass: RoleGuard,
-    },
+    }
   ],
 })
 export class AppModule {}

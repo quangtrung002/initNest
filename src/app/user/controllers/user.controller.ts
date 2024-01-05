@@ -11,6 +11,7 @@ import {
   Controller,
   ClassSerializerInterceptor,
   UseInterceptors,
+  ParseIntPipe,
 } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { ApiExtraModels } from '@nestjs/swagger';
@@ -53,18 +54,18 @@ export class UserController {
     return await this.userService.findAll(req.user, query, true);
   }
 
+  @Get(':id')
   @ApiRetrieveOperation()
-  @Get(':paramId')
   public async view(
     @Request() req,
-    @Param() paramId: IdDto,
+    @Param('id', ParseIntPipe) id: number,
     @Query() query,
   ): Promise<any> {
-    return await this.userService.view(req.user, paramId.id, query);
+    return await this.userService.view(req.user, id, query);
   }
 
-  @ApiCreateOperation()
   @Post()
+  @ApiCreateOperation()
   public async create(
     @Request() req,
     @Body() data: CreateUserDto,
@@ -72,19 +73,22 @@ export class UserController {
     return await this.userService.create(req.user, data);
   }
 
+  @Put(':id')
   @ApiPartialOperation()
-  @Put(':paramId')
   public async update(
     @Request() req,
-    @Param() paramId: IdDto,
+    @Param('id', ParseIntPipe) id: number,
     @Body() body,
   ): Promise<any> {
-    return this.userService.update(req.user, paramId.id, body);
+    return this.userService.update(req.user, id, body);
   }
 
+  @Delete(':id')
   @ApiDeleteOperation()
-  @Delete(':paramId')
-  public async delete(@Request() req, @Param() paramId: IdDto): Promise<any> {
-    return this.userService.delete(req.user, paramId.id);
+  public async delete(
+    @Request() req,
+    @Param('id', ParseIntPipe) id: number,
+  ): Promise<any> {
+    return this.userService.delete(req.user, id);
   }
 }
