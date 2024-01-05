@@ -8,7 +8,6 @@ import {
   Put,
   Query,
   Request,
-  UseGuards,
 } from '@nestjs/common';
 import { ArticleService } from '../services/article.service';
 import {
@@ -20,11 +19,10 @@ import {
 } from 'src/base/swagger/swagger.decorator';
 import { ArticleEntity } from '../entities/article.entity';
 import { CreateArticleDto, UpdateArticleDto } from '../dtos/article.dto';
-import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
-import { RoleGuard } from 'src/base/authorization/role/role.guard';
+import { SkipAuth } from 'src/auth/decorator/jwt.decorator';
 
 @ApiTagAndBearer('Bài viết cá nhân')
-@UseGuards(JwtAuthGuard, RoleGuard)
+@SkipAuth()
 @Controller('articles')
 export class ArticleController {
   constructor(private readonly articleService: ArticleService) {}

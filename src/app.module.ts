@@ -4,9 +4,12 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
 import { UserModule } from './app/user/user.module';
 import { CodeModule } from './app/code/code.module';
-import { APP_PIPE } from '@nestjs/core';
+import { APP_GUARD, APP_PIPE } from '@nestjs/core';
 import { MailModule } from './base/mail/mail.module';
 import { ArticleModule } from './app/article/article.module';
+import { RoleGuard } from './base/authorization/role/role.guard';
+import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
+import { JwtRefreshAuthGuard } from './auth/guards/jwt-refresh-auth.guard';
 
 @Module({
   imports: [
@@ -35,6 +38,18 @@ import { ArticleModule } from './app/article/article.module';
     {
       provide: APP_PIPE,
       useClass: ValidationPipe,
+    },
+    {
+      provide : APP_GUARD,
+      useClass : JwtAuthGuard
+    },
+    // {
+    //   provide : APP_GUARD,
+    //   useClass : JwtRefreshAuthGuard
+    // },
+    {
+      provide : APP_GUARD,
+      useClass : RoleGuard 
     }
   ],
 })

@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { AuthController } from './controllers/auth.controller';
+import { AuthController, AuthPublicController } from './controllers/auth.controller';
 import { AuthService } from './services/auth.service';
 import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
@@ -9,6 +9,7 @@ import { GoogleStrategy } from './strategies/google.strategy';
 import { FacebookStrategy } from './strategies/facebook.strategy';
 import { UserModule } from '../app/user/user.module';
 import { CodeModule } from '../app/code/code.module';
+import { JwtRefreshStrategy } from './strategies/jwt-refresh.strategy';
 
 @Module({
   imports: [
@@ -25,10 +26,11 @@ import { CodeModule } from '../app/code/code.module';
   providers: [
     AuthService,
     JwtStrategy,
+    // JwtRefreshStrategy
     // GoogleStrategy,
     // FacebookStrategy,
   ],
-  controllers: [AuthController],
+  controllers: [AuthController, AuthPublicController],
   exports: [AuthService],
 })
 export class AuthModule {}

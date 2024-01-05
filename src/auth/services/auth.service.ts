@@ -6,7 +6,7 @@ import {
   BadRequestException,
   NotFoundException,
 } from 'src/base/exceptions/custom.exception';
-import { UserService } from 'src/app/user/services/user.service';
+import { UserService } from 'src/app/user/services/admin-user.service';
 import { jwtConstants } from '../constants/jwt.constant';
 import { RegisterDto } from '../dtos/register.dto';
 import { RefreshTokenDto } from '../dtos/refresh-token.dto';

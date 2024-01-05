@@ -6,18 +6,13 @@ import {
   Put,
   Delete,
   Query,
-  Request,
-  UseGuards,
   Controller,
   ClassSerializerInterceptor,
   UseInterceptors,
   ParseIntPipe,
 } from '@nestjs/common';
-import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
-import { ApiExtraModels } from '@nestjs/swagger';
-import { UserService } from '../services/user.service';
+import { UserService } from '../services/admin-user.service';
 import { CreateUserDto } from '../dtos/userCreate.dto';
-import { IdDto } from 'src/base/dtos/id.dto';
 import {
   ApiCreateOperation,
   ApiDeleteOperation,
@@ -32,12 +27,10 @@ import { QueryUserDto } from '../dtos/query_pagination.dto';
 import { UserEntity } from '../entities/user.entity';
 import { Roles } from 'src/base/authorization/role/role.decorator';
 import { RoleGroup } from 'src/base/authorization/role/role.enum';
-import { RoleGuard } from 'src/base/authorization/role/role.guard';
+import { UserAuth } from 'src/auth/decorator/jwt.decorator';
 
-@ApiTagAndBearer('Tài khoản cá nhân')
-@UseGuards(JwtAuthGuard, RoleGuard)
+@ApiTagAndBearer('Admin - Tài khoản người dùng')
 @UseInterceptors(ClassSerializerInterceptor)
-// @ApiExtraModels(PaginatedMeta)
 @ApiResponses([{ status: 403, description: 'Access role: Admin' }])
 @Roles(RoleGroup.Admins)
 @Controller('admin/users')
@@ -48,47 +41,47 @@ export class UserController {
   @ApiPaginatedResponse(UserEntity)
   @ApiListOperation()
   public async index(
-    @Request() req,
+    @UserAuth() user,
     @Query() query: QueryUserDto,
   ): Promise<any> {
-    return await this.userService.findAll(req.user, query, true);
+    return await this.userService.findAll(user, query, true);
   }
 
   @Get(':id')
   @ApiRetrieveOperation()
   public async view(
-    @Request() req,
+    @UserAuth() user,
     @Param('id', ParseIntPipe) id: number,
     @Query() query,
   ): Promise<any> {
-    return await this.userService.view(req.user, id, query);
+    return await this.userService.view(user, id, query);
   }
 
   @Post()
   @ApiCreateOperation()
   public async create(
-    @Request() req,
+    @UserAuth() user,
     @Body() data: CreateUserDto,
   ): Promise<any> {
-    return await this.userService.create(req.user, data);
+    return await this.userService.create(user, data);
   }
 
   @Put(':id')
   @ApiPartialOperation()
   public async update(
-    @Request() req,
+    @UserAuth() user,
     @Param('id', ParseIntPipe) id: number,
     @Body() body,
   ): Promise<any> {
-    return this.userService.update(req.user, id, body);
+    return this.userService.update(user, id, body);
   }
 
   @Delete(':id')
   @ApiDeleteOperation()
   public async delete(
-    @Request() req,
+    @UserAuth() user,
     @Param('id', ParseIntPipe) id: number,
   ): Promise<any> {
-    return this.userService.delete(req.user, id);
+    return this.userService.delete(user, id);
   }
 }
