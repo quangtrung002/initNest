@@ -70,7 +70,7 @@ export const ApiPaginatedResponse = <TModel extends Type<any>>(
   model?: TModel,
 ) => {
   return applyDecorators(
-    ApiExtraModels(PaginatedResult, model),
+    ApiExtraModels(... model ? [PaginatedResult, model] : [PaginatedResult]),
     ApiOkResponse({
       schema: {
         allOf: [
@@ -79,7 +79,7 @@ export const ApiPaginatedResponse = <TModel extends Type<any>>(
             properties: {
               data: {
                 type: 'array',
-                items: { $ref: getSchemaPath(model) },
+                items: model ? { $ref: getSchemaPath(model) } : undefined,
               },
               pagination: {
                 type: 'object',

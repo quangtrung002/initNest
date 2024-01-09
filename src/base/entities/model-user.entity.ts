@@ -1,15 +1,18 @@
-import { ApiHideProperty } from "@nestjs/swagger";
+import { ApiHideProperty, ApiProperty } from "@nestjs/swagger";
 import { UserEntity } from "src/app/user/entities/user.entity";
 import { BaseEntity as OrmBaseEntity, Column, JoinColumn, ManyToOne } from "typeorm";
 
 
 export class ModelUserEntity extends OrmBaseEntity {
+  @ApiProperty()
   @Column({ type: 'int', name: 'created_by_id', nullable: true })
   createdById?: number;
 
+  @ApiProperty()
   @Column({ type: 'int', name: 'updated_by_id', nullable: true })
   updatedById?: number;
 
+  @ApiProperty()
   @Column({ type: 'int', name: 'deleted_by_id', nullable: true })
   deletedById?: number;
 

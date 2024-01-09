@@ -34,6 +34,7 @@ export class UserService extends CommonService<UserEntity> {
       'users.username',
       'users.email',
       'users.status',
+      'users.role',
       'users.password',
       'users.refresh_token',
       'users.uav',
