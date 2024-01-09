@@ -40,7 +40,7 @@ export class ConfigService {
   EMAIL_USE_TLS = (process.env.EMAIL_USE_TLS ?? 'true').toLowerCase() === 'true';
   EMAIL_HOST = process.env.EMAIL_HOST ?? 'smtp.gmail.com';
   EMAIL_USER = process.env.EMAIL_USER ?? 'trungbina3qo@gmail.com';
-  EMAIL_PASSWORD = process.env.EMAIL_PASS ?? 'mjcxjsqhletusffq';
+  EMAIL_PASSWORD = process.env.EMAIL_PASS ?? 'tclaxmpjzsgpqnbc';
   EMAIL_PORT = parseInt(process.env.EMAIL_PORT ?? '587', 10);
 }
 

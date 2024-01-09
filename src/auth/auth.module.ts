@@ -10,6 +10,7 @@ import { FacebookStrategy } from './strategies/facebook.strategy';
 import { UserModule } from '../app/user/user.module';
 import { CodeModule } from '../app/code/code.module';
 import { JwtRefreshStrategy } from './strategies/jwt-refresh.strategy';
+import { MailService } from 'src/base/mail/mail.service';
 
 @Module({
   imports: [
@@ -26,6 +27,7 @@ import { JwtRefreshStrategy } from './strategies/jwt-refresh.strategy';
   providers: [
     AuthService,
     JwtStrategy,
+    MailService,
     // JwtRefreshStrategy
     // GoogleStrategy,
     // FacebookStrategy,

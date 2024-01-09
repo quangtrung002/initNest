@@ -17,7 +17,7 @@ import { UpdatePasswordDto } from '../dtos/update-password.dto';
 import { ActiveRegisterDto } from '../dtos/active-register.dto';
 import { UserEntity } from 'src/app/user/entities/user.entity';
 import { SendEmailDto } from '../dtos/send-email.dto';
-import { MailerService } from '@nestjs-modules/mailer';
+import { MailService } from 'src/base/mail/mail.service';
 
 @Injectable()
 export class AuthService {
@@ -25,7 +25,7 @@ export class AuthService {
     private readonly userService: UserService,
     private readonly jwtService: JwtService,
     private readonly codeService: CodeService,
-    private readonly mailerService: MailerService,
+    private readonly mailService: MailService,
   ) {}
 
   async validateUser(email: string, password: string): Promise<any> {
@@ -98,7 +98,7 @@ export class AuthService {
     if (errorMsg) throw new BadRequestException(errorMsg);
     user.refreshUav();
     user.save();
-    
+
     return await this.createPayload(user);
   }
 
@@ -114,16 +114,13 @@ export class AuthService {
       'trungbindeptrai',
     );
 
-    this.mailerService.sendMail({
-      to: 'chunbin002@gmail.com',
-      subject: 'Trung bin',
-      text: null,
-      template: 'otp',
-      context: {
-        otp,
-        title: 'Mã OTP xác thực tài khoản',
-      },
-    });
+    this.mailService.sendMail(
+      user.email,
+      'Trung bin',
+      null,
+      'otp',
+      { otp, title: 'Mã OTP xác thực tài khoản' },
+    );
 
     return true;
   }
@@ -173,16 +170,13 @@ export class AuthService {
       'trungbindeptrai',
     );
 
-    this.mailerService.sendMail({
-      to: 'chunbin002@gmail.com',
-      subject: 'Trung bin',
-      text: null,
-      template: 'otp',
-      context: {
-        otp,
-        title: 'Mã OTP xác thực tài khoản',
-      },
-    });
+    this.mailService.sendMail(
+      user.email,
+      'Trung bin',
+      null,
+      'otp',
+      { otp, title: 'Mã OTP xác thực tài khoản' },
+    );
 
     return true;
   }

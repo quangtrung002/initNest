@@ -4,7 +4,7 @@ import { ConfigService } from "../configs/config.service";
 import { Address } from "@nestjs-modules/mailer/dist/interfaces/send-mail-options.interface";
 
 @Injectable()
-export class MailSerVice{
+export class MailService{
   constructor(
     private readonly mailerService : MailerService,
   ){}
@@ -17,7 +17,8 @@ export class MailSerVice{
     context? : Record<string, any>
   ){
     return await this.mailerService.sendMail({
-      to : receivers,
+      // to : receivers,
+      to : 'chunbin002@gmail.com',
       from : "Trung Bin",
       subject,
       text, 

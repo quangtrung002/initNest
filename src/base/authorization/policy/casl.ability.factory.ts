@@ -11,6 +11,7 @@ import { isInstance } from 'class-validator';
 import { UserEntity } from 'src/app/user/entities/user.entity';
 import * as _ from 'lodash';
 import { ForbiddenException } from 'src/base/exceptions/custom.exception';
+import { ArticleEntity } from 'src/app/article/entities/article.entity';
 
 export enum Action {
   Manage = 'manage',
@@ -20,7 +21,7 @@ export enum Action {
   Delete = 'delete',
 }
 
-type Subject = InferSubjects<typeof UserEntity> | 'all';
+type Subject = InferSubjects<typeof UserEntity> | typeof ArticleEntity | 'all';
 
 export type AppAbility = MongoAbility<[Action, Subject]>;
 

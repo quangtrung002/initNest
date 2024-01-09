@@ -1,18 +1,13 @@
 import { Injectable } from '@nestjs/common';
-import { DeepPartial, Repository, SelectQueryBuilder } from 'typeorm';
+import {  Repository } from 'typeorm';
 import { UserEntity } from '../entities/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import * as bcrypt from 'bcrypt';
 import { CommonService } from 'src/base/services/common.service';
 import {
   ConflictException,
-  CustomException,
 } from 'src/base/exceptions/custom.exception';
-import { MailerService } from '@nestjs-modules/mailer';
 import { RegisterDto } from 'src/auth/dtos/register.dto';
 import { Status } from 'src/base/constants/status';
-import { IdDto } from 'src/base/dtos/id.dto';
-import { HttpStatusCode } from 'axios';
 import { config } from 'src/base/configs/config.service';
 import { CreateUserDto } from '../dtos/userCreate.dto';
 
@@ -21,7 +16,6 @@ export class UserService extends CommonService<UserEntity> {
   constructor(
     @InjectRepository(UserEntity)
     protected readonly repoUser: Repository<UserEntity>,
-    private readonly mailerService: MailerService,
   ) {
     super(repoUser);
   }
