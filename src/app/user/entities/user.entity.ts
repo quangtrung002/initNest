@@ -11,7 +11,6 @@ import { ArticleEntity } from 'src/app/article/entities/article.entity';
 
 @Entity('users')
 export class UserEntity extends BaseEntity {
-  @ApiProperty()
   @Column({
     name: 'username',
     type: 'varchar',
@@ -19,7 +18,6 @@ export class UserEntity extends BaseEntity {
   })
   username: string;
 
-  @ApiProperty()
   @Column({
     name: 'email',
     type: 'varchar',
@@ -28,7 +26,6 @@ export class UserEntity extends BaseEntity {
   })
   email: string;
 
-  @ApiProperty()
   @Column({
     name: 'role',
     type: 'varchar',
@@ -65,6 +62,7 @@ export class UserEntity extends BaseEntity {
   })
   uav?: number;
 
+  @ApiHideProperty()
   @OneToMany(() => CodeEntity, (codes) => codes.user)
   codes: CodeEntity[];
 

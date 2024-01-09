@@ -8,6 +8,20 @@
         "include": "mail/templates/**/*.hbs",
         "watchAssets": true
       }
+    ],
+    "plugins": [
+      {
+        "name": "@nestjs/swagger",
+        "options": {
+          "classValidatorShim": true,
+          "dtoFileNameSuffix": [
+            ".dto.ts",
+            ".entity.ts",
+            ".class.ts",
+            ".interface.ts"
+          ]
+        }
+      }
     ]
   }
 }
