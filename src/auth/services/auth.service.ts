@@ -114,13 +114,7 @@ export class AuthService {
       'trungbindeptrai',
     );
 
-    this.mailService.sendMail(
-      user.email,
-      'Trung bin',
-      null,
-      'otp',
-      { otp, title: 'Mã OTP xác thực tài khoản' },
-    );
+    this.mailService.sendMail(user.email, 'Trung bin', null, 'invite', { otp });
 
     return true;
   }
@@ -170,13 +164,7 @@ export class AuthService {
       'trungbindeptrai',
     );
 
-    this.mailService.sendMail(
-      user.email,
-      'Trung bin',
-      null,
-      'otp',
-      { otp, title: 'Mã OTP xác thực tài khoản' },
-    );
+    this.mailService.sendMail(user.email, 'Trung bin', null, 'otp', { otp });
 
     return true;
   }

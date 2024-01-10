@@ -9,7 +9,7 @@ import { MailService } from './mail.service';
   imports: [
     MailerModule.forRoot({
       transport: {
-        host: 'smtp.example.com',
+        host: 'smtp.gmail.com',
         secure: true,
         auth: {
           user: config.EMAIL_USER,
