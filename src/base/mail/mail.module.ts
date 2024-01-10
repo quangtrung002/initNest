@@ -10,7 +10,7 @@ import { MailService } from './mail.service';
     MailerModule.forRoot({
       transport: {
         host: 'smtp.example.com',
-        secure: false,
+        secure: true,
         auth: {
           user: config.EMAIL_USER,
           pass: config.EMAIL_PASSWORD,

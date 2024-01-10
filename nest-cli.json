@@ -5,7 +5,7 @@
   "compilerOptions": {
     "assets": [
       {
-        "include": "mail/templates/**/*.hbs",
+        "include": "base/mail/templates/**/*.hbs",
         "watchAssets": true
       }
     ],
