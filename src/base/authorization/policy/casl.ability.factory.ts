@@ -12,6 +12,7 @@ import { UserEntity } from 'src/app/user/entities/user.entity';
 import * as _ from 'lodash';
 import { ForbiddenException } from 'src/base/exceptions/custom.exception';
 import { ArticleEntity } from 'src/app/article/entities/article.entity';
+import { User } from 'src/auth/interfaces/user.class';
 
 export enum Action {
   Manage = 'manage',
@@ -26,7 +27,7 @@ type Subject = InferSubjects<typeof UserEntity> | typeof ArticleEntity | 'all';
 export type AppAbility = MongoAbility<[Action, Subject]>;
 
 export class CaslAbilityFactory {
-  createForUser(user: UserEntity) {
+  createForUser(user: User) {
     const { build } = this.newAbilityBuilder();
     return this.buildPolicy(build);
   }
@@ -44,30 +45,21 @@ export class CaslAbilityFactory {
     });
   }
 
-  private getPolicy(userOrPolicy: AppAbility | UserEntity): AppAbility {
-    const isUser = isInstance(userOrPolicy, UserEntity);
-    return isUser
-      ? this.createForUser(userOrPolicy as UserEntity)
-      : (userOrPolicy as AppAbility);
-  }
-
   assertAbility(
-    userOrPolicy: AppAbility | UserEntity,
+    userOrPolicy: AppAbility | User,
     ...[action, subject, field]: CanParameters<any>
   ) {
-    const policy = this.getPolicy(userOrPolicy);
-    if (!this.hasAbility(userOrPolicy, action, subject, field)) {
+    const policy = this.createForUser(userOrPolicy as User);
+    if (!this.hasAbility(policy, action, subject, field)) {
       this.throwForbidden(policy, action, subject, field);
     }
   }
 
   hasAbility(
-    userOrPolicy: AppAbility | UserEntity,
+    policy: AppAbility,
     ...[action, subject, field]: CanParameters<any>
   ) {
-    const policy = this.getPolicy(userOrPolicy);
     const can = policy.can(action, subject, field);
-    const cannot = policy.cannot(action, subject, field);
     return can;
   }
 

@@ -3,10 +3,10 @@ import {
   Post,
   Get,
   Body,
-  Request,
   UseGuards,
+  UseInterceptors,
+  ClassSerializerInterceptor,
 } from '@nestjs/common';
-import { ApiBearerAuth } from '@nestjs/swagger';
 import { LoginDto } from '../dtos/login.dto';
 import { AuthService } from '../services/auth.service';
 import { ApiTags } from '@nestjs/swagger';
@@ -16,17 +16,19 @@ import { JwtAuthGuard } from '../guards/jwt-auth.guard';
 import { ForgotPasswordDto } from '../dtos/forgot-password.dto';
 import { UpdatePasswordDto } from '../dtos/update-password.dto';
 import { ActiveRegisterDto } from '../dtos/active-register.dto';
-import { ApiOperation } from 'src/base/swagger/swagger.decorator';
+import { ApiLanguageHeader, ApiOperation, ApiTagAndBearer } from 'src/base/swagger/swagger.decorator';
 import { SendEmailDto } from '../dtos/send-email.dto';
-import { SkipAuth } from '../decorator/jwt.decorator';
+import { SkipAuth, UserAuth } from '../decorator/jwt.decorator';
 
 @SkipAuth()
-@ApiTags('Auth')
+@ApiTags('Xác thực')
+@ApiLanguageHeader()
 @Controller('auth')
 export class AuthPublicController {
   constructor(private readonly authService: AuthService) {}
 
   @Post('/login')
+  @UseInterceptors(ClassSerializerInterceptor)
   @ApiOperation({ summary: 'Đăng nhập' })
   async login(@Body() data: LoginDto): Promise<any> {
     return await this.authService.login(data);
@@ -69,7 +71,7 @@ export class AuthPublicController {
   }
 }
 
-@ApiTags('Auth')
+@ApiTagAndBearer('Xác thực')
 @UseGuards(JwtAuthGuard)
 @Controller()
 export class AuthController {
@@ -77,14 +79,14 @@ export class AuthController {
 
   @Get('profile')
   @ApiOperation({ summary: 'Lấy thông tin người dùng đang đăng nhập' })
-  @ApiBearerAuth()
-  async getProfile(@Request() req): Promise<any> {
-    return await req.user;
+  async getProfile(@UserAuth() user): Promise<any> {
+    return await user;
   }
-
+  
   @Post('auth/logout')
   @ApiOperation({ summary: 'Đăng xuất' })
-  async logout(@Request() req): Promise<any> {
-    return await this.authService.logout(req.user);
+  async logout(@UserAuth() user): Promise<any> {
+    console.log(user)
+    return await this.authService.logout(user);
   }
 }

@@ -6,7 +6,6 @@ import {
   BadRequestException,
   NotFoundException,
 } from 'src/base/exceptions/custom.exception';
-import { UserService } from 'src/app/user/services/admin-user.service';
 import { jwtConstants } from '../constants/jwt.constant';
 import { RegisterDto } from '../dtos/register.dto';
 import { RefreshTokenDto } from '../dtos/refresh-token.dto';
@@ -18,6 +17,7 @@ import { ActiveRegisterDto } from '../dtos/active-register.dto';
 import { UserEntity } from 'src/app/user/entities/user.entity';
 import { SendEmailDto } from '../dtos/send-email.dto';
 import { MailService } from 'src/base/mail/mail.service';
+import { UserService } from './user.service';
 
 @Injectable()
 export class AuthService {
@@ -32,16 +32,16 @@ export class AuthService {
     const user: UserEntity = await this.userService.getOneOrNull({ email });
     if (!user) return null;
     const isEqual = user.comparePw(password);
-
+  
     return isEqual ? user : null;
   }
 
-  private async createPayload(userData: UserEntity, refresh: boolean = true) {
+  private async createPayload(user: UserEntity, refresh: boolean = true) {
     const payload = {
-      email: userData.email,
-      user_id: userData.id,
-      role: userData.role,
-      uav: userData['uav'],
+      email: user.email,
+      user_id: user.id,
+      role: user.role,
+      uav: user['uav'],
     };
     const accessToken = await this.jwtService.sign(payload);
 
@@ -51,31 +51,31 @@ export class AuthService {
         expiresIn: jwtConstants.expiresIn_token,
       });
 
-      userData.hashRefreshToken(refreshToken);
+      user.hashRefreshToken(refreshToken);
 
       return {
         success: true,
         expires_in: jwtConstants.expiresIn,
         access_token: accessToken,
         refresh_token: refreshToken,
-        user: payload,
+        user,
       };
     } else {
       return {
         success: true,
         expires_in: jwtConstants.expiresIn,
         access_token: accessToken,
-        user: payload,
+        user,
       };
     }
   }
 
-  private _loginError(userData) {
+  private _loginError(user) {
     let errorMsg = null;
-    if (!userData) {
+    if (!user) {
       errorMsg = 'Your login account is invalid!';
     } else {
-      switch (userData.status) {
+      switch (user.status) {
         case Status.REGISTER_STATUS:
           errorMsg =
             'This account is not activated, please contact the administrator to activate!';
@@ -103,7 +103,7 @@ export class AuthService {
   }
 
   async register(dto: RegisterDto) {
-    await this.userService.createUser(dto);
+    return await this.userService.createUser(dto);
   }
 
   async sendOtp(dto: SendEmailDto) {
@@ -113,8 +113,7 @@ export class AuthService {
       CodeType.REGISTER,
       'trungbindeptrai',
     );
-
-    this.mailService.sendMail(user.email, 'Trung bin', null, 'invite', { otp });
+    this.mailService.sendMail(user.email, 'Trung bin', null, 'otp', { otp });
 
     return true;
   }

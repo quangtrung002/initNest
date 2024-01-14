@@ -1,11 +1,9 @@
 import { Injectable } from '@nestjs/common';
-import {  Repository } from 'typeorm';
+import { Repository, SelectQueryBuilder } from 'typeorm';
 import { UserEntity } from '../entities/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CommonService } from 'src/base/services/common.service';
-import {
-  ConflictException,
-} from 'src/base/exceptions/custom.exception';
+import { ConflictException } from 'src/base/exceptions/custom.exception';
 import { RegisterDto } from 'src/auth/dtos/register.dto';
 import { Status } from 'src/base/constants/status';
 import { config } from 'src/base/configs/config.service';
@@ -27,49 +25,24 @@ export class UserService extends CommonService<UserEntity> {
       'users.id',
       'users.username',
       'users.email',
-      'users.status',
       'users.role',
       'users.password',
       'users.refresh_token',
       'users.uav',
+      'users.status',
       'users.createdAt',
       'users.updatedAt',
+      'users.createdById',
+      'users.updatedById',
+      'users.deletedById',
     ];
   }
 
-  async getUserActice(option: Partial<UserEntity>): Promise<UserEntity> {
-    return this.repoUser
-      .createQueryBuilder(this.aliasName)
-      .where(option)
-      .andWhere('users.status = :status', { status: Status.ACTIVE })
-      .getOne();
-  }
-
-  async getOneOrNull(option: Partial<UserEntity>): Promise<UserEntity | null> {
-    return this.repoUser
-      .createQueryBuilder(this.aliasName)
-      .where(option)
-      .getOne();
-  }
-
-  async getUserByRefresh(refresh_token, email): Promise<any> {
-    const user = await this.getOneOrNull({ email });
-    if (!user) return null;
-    const isEqual = user.campareRefreshToken(refresh_token);
-
-    return isEqual ? user : null;
-  }
-
-  async activeUser(id: number): Promise<void> {
-    this.repoUser.update({ id }, { status: Status.ACTIVE });
-  }
-
-  async createUser(dto: RegisterDto): Promise<any> {
-    const isExist = await this._checkFieldExist(dto.email, 'email', null);
-    if (isExist) throw new ConflictException('Email already exists');
-
-    const user = await this.repoUser.create(dto);
-    user.hashPw(dto.password);
-    user.save();
+  protected _orderList(
+    query: SelectQueryBuilder<UserEntity>,
+    params: any,
+  ): SelectQueryBuilder<UserEntity> {
+    query = query.orderBy(`${this.aliasName}.id`, 'ASC');
+    return query;
   }
 }

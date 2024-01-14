@@ -11,10 +11,12 @@ import { UserModule } from '../app/user/user.module';
 import { CodeModule } from '../app/code/code.module';
 import { JwtRefreshStrategy } from './strategies/jwt-refresh.strategy';
 import { MailService } from 'src/base/mail/mail.service';
+import { UserService } from './services/user.service';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { UserEntity } from 'src/app/user/entities/user.entity';
 
 @Module({
   imports: [
-    UserModule,
     PassportModule,
     CodeModule,
     JwtModule.register({
@@ -23,8 +25,10 @@ import { MailService } from 'src/base/mail/mail.service';
         expiresIn: jwtConstants.expiresIn,
       },
     }),
+    TypeOrmModule.forFeature([UserEntity])
   ],
   providers: [
+    UserService,
     AuthService,
     JwtStrategy,
     MailService,
