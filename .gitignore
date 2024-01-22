@@ -3,6 +3,10 @@
 /node_modules
 
 .env.dev
+
+.vscode
+!.vscode/launch.json
+
 # Logs
 logs
 *.log

@@ -1,5 +1,6 @@
 import {
   Body,
+  ClassSerializerInterceptor,
   Controller,
   Delete,
   Get,
@@ -8,7 +9,7 @@ import {
   Post,
   Put,
   Query,
-  Request,
+  UseInterceptors,
 } from '@nestjs/common';
 import { ArticleService } from '../services/article.service';
 import {
@@ -23,10 +24,14 @@ import { ArticleEntity } from '../entities/article.entity';
 import { CreateArticleDto, UpdateArticleDto } from '../dtos/article.dto';
 import { UserAuth } from 'src/auth/decorator/jwt.decorator';
 import { ArticleCasl } from '../policies/article.casl';
+import { User } from 'src/auth/interfaces/user.class';
+import { ArticleQueryDto } from '../dtos/article.dto';
 import { Action } from 'src/base/authorization/policy/casl.ability.factory';
+import { subject } from '@casl/ability';
 
 const articleSelf = 'bài viết cá nhân';
 
+@UseInterceptors(ClassSerializerInterceptor)
 @ApiTagAndBearer('Bài viết cá nhân')
 @Controller('articles')
 export class ArticleController {
@@ -38,30 +43,36 @@ export class ArticleController {
   @Get()
   @ApiListOperation({ summary: 'Lấy tất cả ' + articleSelf })
   @ApiPaginatedResponse(ArticleEntity)
-  async index(@UserAuth() user, @Query() query): Promise<any> {
+  async index(
+    @UserAuth() user: User,
+    @Query() query: ArticleQueryDto,
+  ): Promise<any> {
     return this.articleService.findAll(user, query, true);
   }
 
   @Post()
   @ApiCreateOperation({ summary: 'Tạo 1 ' + articleSelf })
-  async create(@UserAuth() user, @Body() data: CreateArticleDto): Promise<any> {
-    return this.articleService.create(user, data);
+  async create(
+    @UserAuth() user: User,
+    @Body() dto: CreateArticleDto,
+  ): Promise<any> {
+    this.articleCasl.assertAbility(user, Action.Create, dto)
+    return this.articleService.create(user, dto);
   }
 
   @Put(':id')
   @ApiUpdateOperation({ summary: 'Sửa 1 ' + articleSelf })
   async update(
-    @UserAuth() user,
+    @UserAuth() user: User,
     @Param('id', ParseIntPipe) id: number,
-    @Body() data: UpdateArticleDto,
+    @Body() dto: UpdateArticleDto,
   ): Promise<any> {
-    this.articleCasl.assertAbility(user, Action.Update, data);
-    return this.articleService.update(user, id, data);
+    return this.articleService.update(user, id, dto);
   }
 
   @Delete(':id')
   @ApiDeleteOperation({ summary: 'Xóa 1 ' + articleSelf })
-  async delete(@UserAuth() user, @Param('id', ParseIntPipe) id: number) {
+  async delete(@UserAuth() user: User, @Param('id', ParseIntPipe) id: number) {
     return this.articleService.delete(user, id);
   }
 }

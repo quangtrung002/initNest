@@ -1,14 +1,23 @@
-import { ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty, IsOptional } from 'class-validator';
+import { factoryQuerySpecificationDto } from 'src/base/dtos/query-specification.dto';
 
 export class CreateArticleDto {
-  @ApiProperty()
   @IsNotEmpty()
   title: string;
 
-  @ApiProperty()
   @IsNotEmpty()
   description: string;
+
+  @IsOptional()
+  @IsNotEmpty()
+  isPublished: boolean = false;
 }
 
 export class UpdateArticleDto extends CreateArticleDto {}
+
+export class ArticleQueryDto extends factoryQuerySpecificationDto({
+  searchFields: ['title'],
+  filterExample: {
+    title: 'title',
+  },
+}) {}
