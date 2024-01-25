@@ -14,8 +14,16 @@ export class ResponesTransformInterceptor<T>
 {
   intercept(
     context: ExecutionContext,
-    next: CallHandler<T>,
+    next: CallHandler,
   ): Observable<Payload<T>> {
-    return next.handle().pipe(map((data) => (data ? data : defaultPayload)));
+    return next
+      .handle()
+      .pipe(
+        map((data) =>
+          data?.data
+            ? { ...defaultPayload, data: data.data }
+            : { ...defaultPayload, data: data ?? [] },
+        ),
+      );
   }
 }

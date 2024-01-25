@@ -54,15 +54,13 @@ export class AuthService {
       user.hashRefreshToken(refreshToken);
 
       return {
-        success: true,
-        expires_in: jwtConstants.expiresIn,
         access_token: accessToken,
         refresh_token: refreshToken,
+        expires_in: jwtConstants.expiresIn,
         user,
       };
     } else {
       return {
-        success: true,
         expires_in: jwtConstants.expiresIn,
         access_token: accessToken,
         user,

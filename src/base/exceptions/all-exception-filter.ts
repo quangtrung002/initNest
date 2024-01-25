@@ -12,10 +12,14 @@ export class AllExceptionFilter implements ExceptionFilter {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse();
     const { status, json } = AllExceptionFilter.prepareException(exception);
+    console.log(json);
     let msg: string = '';
     let success: boolean = false;
     if (json['message']) {
-      msg = typeof json['message'] === 'object' ? json['message'][0].toUpperCase() : json['message'].toUpperCase();
+      msg =
+        typeof json['message'] === 'object'
+          ? json['message'][0].toUpperCase()
+          : json['message'].toUpperCase();
     }
     if (json['success']) {
       success = json['success'];
@@ -24,6 +28,7 @@ export class AllExceptionFilter implements ExceptionFilter {
     response.status(status).send({
       success,
       msg,
+      data: [],
     });
   }
 
