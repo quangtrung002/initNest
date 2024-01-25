@@ -2,13 +2,14 @@ import { ApiProperty } from '@nestjs/swagger';
 
 export const defaultPayload = {
   success: true,
-  // errorCode : '000000',
   msg: 'Successfully action',
+  data: null,
 };
 
 export abstract class Payload<TData> {
   success?: boolean;
   msg?: string;
+  data?: TData | null;
   constructor(partial: Payload<TData>) {
     Object.assign(this, partial);
   }
