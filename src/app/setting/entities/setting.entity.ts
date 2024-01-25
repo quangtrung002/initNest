@@ -1,3 +1,4 @@
+import { Exclude } from 'class-transformer';
 import { SettingDataType } from 'src/base/constants/setting.enum';
 import { Status } from 'src/base/constants/status';
 import {
@@ -11,6 +12,7 @@ import {
 @Entity('settings')
 export class SettingEntity {
   @PrimaryGeneratedColumn()
+  @Exclude({ toPlainOnly: true })
   id: number;
 
   @Column({ unique: true })

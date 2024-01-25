@@ -11,6 +11,7 @@ import { RoleGuard } from './base/authorization/role/role.guard';
 import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
 import { JwtRefreshAuthGuard } from './auth/guards/jwt-refresh-auth.guard';
 import { SeederModule } from './base/migrations/seed/seeder.module';
+import { SettingsModule } from './app/setting/setting.module';
 
 @Module({
   imports: [
@@ -35,6 +36,7 @@ import { SeederModule } from './base/migrations/seed/seeder.module';
     UserModule,
     CodeModule,
     ArticleModule,
+    SettingsModule,
   ],
   providers: [
     {
