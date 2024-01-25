@@ -10,6 +10,7 @@ import { ArticleModule } from './app/article/article.module';
 import { RoleGuard } from './base/authorization/role/role.guard';
 import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
 import { JwtRefreshAuthGuard } from './auth/guards/jwt-refresh-auth.guard';
+import { SeederModule } from './base/migrations/seed/seeder.module';
 
 @Module({
   imports: [
@@ -28,11 +29,12 @@ import { JwtRefreshAuthGuard } from './auth/guards/jwt-refresh-auth.guard';
       logging: true,
       entities: ['dist/**/*.entity{.ts,.js}'],
     }),
+    SeederModule,
     MailModule,
     AuthModule,
     UserModule,
     CodeModule,
-    ArticleModule
+    ArticleModule,
   ],
   providers: [
     {
@@ -40,17 +42,17 @@ import { JwtRefreshAuthGuard } from './auth/guards/jwt-refresh-auth.guard';
       useClass: ValidationPipe,
     },
     {
-      provide : APP_GUARD,
-      useClass : JwtAuthGuard
+      provide: APP_GUARD,
+      useClass: JwtAuthGuard,
     },
     // {
     //   provide : APP_GUARD,
     //   useClass : JwtRefreshAuthGuard
     // },
     {
-      provide : APP_GUARD,
-      useClass : RoleGuard 
-    }
+      provide: APP_GUARD,
+      useClass: RoleGuard,
+    },
   ],
 })
 export class AppModule {}
