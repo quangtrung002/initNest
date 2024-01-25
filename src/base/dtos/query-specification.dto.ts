@@ -30,12 +30,12 @@ export class PaginationSpecificationDto {
   @Transform(({ value }) => value && parseInt(String(value)))
   @IsPositive()
   @Max(config.PAGINATION_LIMIT)
-  pageSize?: number = config.PAGINATION_LIMIT;
+  limit?: number = config.PAGINATION_LIMIT;
 
   @IsOptional()
   @Transform(({ value }) => value && parseInt(String(value)))
   @IsPositive()
-  pageNumber?: number = config.PAGINATION_PAGE;
+  page?: number = config.PAGINATION_PAGE;
 
   @ApiHideProperty()
   disablePagination?: boolean;

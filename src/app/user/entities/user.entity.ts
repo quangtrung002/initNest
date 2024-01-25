@@ -11,55 +11,31 @@ import { ArticleEntity } from 'src/app/article/entities/article.entity';
 
 @Entity('users')
 export class UserEntity extends BaseEntity {
-  @Column({
-    name: 'username',
-    type: 'varchar',
-    length: 255,
-  })
+  @Column()
   username: string;
 
-  @Column({
-    name: 'email',
-    type: 'varchar',
-    length: 255,
-    unique: true,
-  })
+  @Column({ unique: true })
   email: string;
 
-  @Column({
-    name: 'role',
-    type: 'varchar',
-    default: Role.User,
-  })
+  @Column({ default: 'avatar.jpg', nullable : true })
+  avatar: string;
+
+  @Column({ default: Role.User })
   role: string;
 
   @ApiHideProperty()
   @Exclude()
-  @Column({
-    name: 'password',
-    type: 'varchar',
-    length: 255,
-  })
+  @Column()
   password: string;
 
   @ApiHideProperty()
   @Exclude()
-  @Column({
-    name: 'refresh_token',
-    type: 'varchar',
-    length: 255,
-    nullable: true,
-  })
+  @Column({ nullable: true })
   refresh_token?: string;
 
   @ApiHideProperty()
   @Exclude()
-  @Column({
-    name: 'uav',
-    type: 'int',
-    nullable: true,
-    default: 0,
-  })
+  @Column({ nullable: true, default: 0 })
   uav?: number;
 
   @ApiHideProperty()

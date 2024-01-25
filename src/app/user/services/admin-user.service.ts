@@ -3,14 +3,9 @@ import { Repository, SelectQueryBuilder } from 'typeorm';
 import { UserEntity } from '../entities/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CommonService } from 'src/base/services/common.service';
-import { ConflictException } from 'src/base/exceptions/custom.exception';
-import { RegisterDto } from 'src/auth/dtos/register.dto';
-import { Status } from 'src/base/constants/status';
-import { config } from 'src/base/configs/config.service';
-import { CreateUserDto } from '../dtos/userCreate.dto';
 
 @Injectable()
-export class UserService extends CommonService<UserEntity> {
+export class AdminUserService extends CommonService<UserEntity> {
   constructor(
     @InjectRepository(UserEntity)
     protected readonly repoUser: Repository<UserEntity>,
@@ -20,29 +15,18 @@ export class UserService extends CommonService<UserEntity> {
 
   protected aliasName: string = 'users';
 
-  protected _selectFields(param: {}): string[] {
-    return [
-      'users.id',
-      'users.username',
-      'users.email',
-      'users.role',
-      'users.password',
-      'users.refresh_token',
-      'users.uav',
-      'users.status',
-      'users.createdAt',
-      'users.updatedAt',
-      'users.createdById',
-      'users.updatedById',
-      'users.deletedById',
-    ];
+  _joinRelation(
+    queryBuilder: SelectQueryBuilder<UserEntity>,
+    params?: {},
+  ): SelectQueryBuilder<UserEntity> {
+    queryBuilder.leftJoinAndSelect(this.aliasName + '.articles', 'articles');
+    return queryBuilder;
   }
 
-  protected _orderList(
-    query: SelectQueryBuilder<UserEntity>,
-    params: any,
+  actionPreList(
+    queryBuilder: SelectQueryBuilder<UserEntity>,
   ): SelectQueryBuilder<UserEntity> {
-    query = query.orderBy(`${this.aliasName}.id`, 'ASC');
-    return query;
+    queryBuilder.leftJoinAndSelect(this.aliasName + '.articles', 'articles');
+    return queryBuilder;
   }
 }

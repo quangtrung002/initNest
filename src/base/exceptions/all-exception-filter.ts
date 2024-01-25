@@ -15,15 +15,15 @@ export class AllExceptionFilter implements ExceptionFilter {
     let msg: string = '';
     let success: boolean = false;
     if (json['message']) {
-      msg = typeof json['message'] === 'object' ? json['message'][0] : json['message'];
+      msg = typeof json['message'] === 'object' ? json['message'][0].toUpperCase() : json['message'].toUpperCase();
     }
     if (json['success']) {
       success = json['success'];
     }
 
     response.status(status).send({
-      msg,
       success,
+      msg,
     });
   }
 

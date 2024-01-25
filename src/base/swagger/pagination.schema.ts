@@ -1,37 +1,43 @@
-import { ApiProperty } from "@nestjs/swagger"
+import { ApiProperty } from '@nestjs/swagger';
 
-export const defaulPayload = {
-  success : true,
-  errorCode : '000000',
-  msg : '',
+export const defaultPayload = {
+  success: true,
+  // errorCode : '000000',
+  msg: 'Successfully action',
+};
+
+export abstract class Payload<TData> {
+  success?: boolean;
+  msg?: string;
+  constructor(partial: Payload<TData>) {
+    Object.assign(this, partial);
+  }
 }
 
-export class PaginatedMeta{
+export class PaginatedMeta {
   @ApiProperty()
-  total : number; 
+  total: number;
 
   @ApiProperty()
-  per_page : number;
+  per_page: number;
 
   @ApiProperty()
-  current_page : number;
+  current_page: number;
 
   @ApiProperty()
-  last_page : number;
+  last_page: number;
 
   @ApiProperty()
-  from : number;
+  from: number;
 
   @ApiProperty()
-  to : number;
+  to: number;
 }
 
-export class PaginatedResult<TData>{
+export class PaginatedResult<TData> {
   @ApiProperty()
-  data : TData
+  data: TData;
 
   @ApiProperty()
-  pagination : PaginatedMeta
-
-  
+  pagination: PaginatedMeta;
 }

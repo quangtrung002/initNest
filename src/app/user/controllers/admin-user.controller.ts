@@ -2,7 +2,6 @@ import {
   Body,
   Get,
   Param,
-  Post,
   Put,
   Delete,
   Query,
@@ -10,78 +9,84 @@ import {
   ClassSerializerInterceptor,
   UseInterceptors,
   ParseIntPipe,
+  Post,
+  Patch,
 } from '@nestjs/common';
-import { UserService } from '../services/admin-user.service';
-import { CreateUserDto } from '../dtos/userCreate.dto';
 import {
-  ApiCreateOperation,
   ApiDeleteOperation,
   ApiListOperation,
+  ApiOperation,
   ApiPaginatedResponse,
   ApiPartialOperation,
   ApiResponses,
   ApiRetrieveOperation,
   ApiTagAndBearer,
 } from 'src/base/swagger/swagger.decorator';
-import { QueryUserDto } from '../dtos/query_pagination.dto';
+import { AdminLockUserDto, AdminQueryUserDto } from '../dtos/admin-user.dto';
+import { AdminUserService } from '../services/admin-user.service';
 import { UserEntity } from '../entities/user.entity';
 import { Roles } from 'src/base/authorization/role/role.decorator';
 import { RoleGroup } from 'src/base/authorization/role/role.enum';
 import { UserAuth } from 'src/auth/decorator/jwt.decorator';
+import { User } from 'src/auth/interfaces/user.class';
+import { SetPasswordDto } from '../dtos/user.dto';
+import { In } from 'typeorm';
+import { IdsDto } from 'src/base/dtos/common.dto';
+import { UserService } from '../services/user-self.service';
 
 @ApiTagAndBearer('Admin - Tài khoản người dùng')
 @UseInterceptors(ClassSerializerInterceptor)
 @ApiResponses([{ status: 403, description: 'Access role: Admin' }])
 @Roles(RoleGroup.Admins)
 @Controller('admin/users')
-export class UserController {
-  constructor(protected readonly userService: UserService) {}
+export class AdminUserController {
+  constructor(
+    private readonly adminUserService: AdminUserService,
+    private readonly userService: UserService,
+  ) {}
 
   @Get()
   @ApiPaginatedResponse(UserEntity)
   @ApiListOperation()
-  public async index(
-    @UserAuth() user,
-    @Query() query: QueryUserDto,
+  async index(
+    @UserAuth() user: User,
+    @Query() query: AdminQueryUserDto,
   ): Promise<any> {
-    return await this.userService.findAll(user, query, true);
+    return await this.adminUserService.findAll(user, query, true);
   }
 
   @Get(':id')
   @ApiRetrieveOperation()
-  public async view(
-    @UserAuth() user,
+  async view(
+    @UserAuth() user: User,
     @Param('id', ParseIntPipe) id: number,
     @Query() query,
-  ): Promise<any> {
-    return await this.userService.view(user, id, query);
+  ): Promise<UserEntity> {
+    return await this.adminUserService.view(user, id, query);
   }
 
-  @Post()
-  @ApiCreateOperation()
-  public async create(
-    @UserAuth() user,
-    @Body() data: CreateUserDto,
-  ): Promise<any> {
-    return await this.userService.create(user, data);
+  @Put('lock')
+  @ApiPartialOperation({ summary: 'Sửa nhiều bản ghi' })
+  async update(@UserAuth() user: User, @Body() dto: AdminLockUserDto) {
+    return await this.adminUserService.updateManyBy(
+      user,
+      { id: In(dto.userId) },
+      { status: dto.status, createdById: user.id },
+    );
   }
 
-  @Put(':id')
-  @ApiPartialOperation()
-  public async update(
-    @UserAuth() user,
+  @Delete('bulk-delete')
+  @ApiDeleteOperation({ summary: 'Xóa nhiều bản ghi' })
+  async delete(@UserAuth() user: User, @Body() dto: IdsDto) {
+    return await this.userService.bulkDelete(user, dto.ids);
+  }
+
+  @Post(':id/set-password')
+  @ApiOperation({ summary: 'Tạo mới mật khẩu cho tài khoản' })
+  async setPassword(
     @Param('id', ParseIntPipe) id: number,
-    @Body() body,
-  ): Promise<any> {
-    return this.userService.update(user, id, body);
-  }
-
-  @Delete(':id')
-  @ApiDeleteOperation()
-  public async delete(
-    @UserAuth() user,
-    @Param('id', ParseIntPipe) id: number,
-  ): Promise<any> {
-    return this.userService.delete(user, id);
+    @Body() dto: SetPasswordDto,
+  ) {
+    return await this.userService.setPassword(id, dto);
   }
 }

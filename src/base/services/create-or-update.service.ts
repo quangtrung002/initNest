@@ -1,4 +1,4 @@
-import { BaseEntity, DeepPartial, Repository } from 'typeorm';
+import { BaseEntity, DeepPartial, FindOptionsWhere, Repository } from 'typeorm';
 import { ListService } from './list.service';
 import { ConflictException, NotFoundException } from '@nestjs/common';
 import { SuccessException } from '../exceptions/custom.exception';
@@ -26,7 +26,7 @@ export class CreateOrUpdateService<
   }
 
   public async update(
-    currentUser : User,
+    currentUser: User,
     id: number,
     dto: DeepPartial<T> | T,
   ): Promise<any> {
@@ -50,6 +50,40 @@ export class CreateOrUpdateService<
       .where(this.aliasName + '.id = :paramId', { paramId: id })
       .getOne();
     return this.recordOrNotFound(record);
+  }
+
+  async updateManyBy(
+    currentUser: User,
+    where: FindOptionsWhere<T>,
+    dto,
+    option?,
+  ) {
+    if (option?.includeOldRecord) {
+      const oldRecords = await this.repository.find({ where });
+      if (!oldRecords.length) return;
+
+      const updateDto = await this.actionPreUpdateMany(
+        currentUser,
+        oldRecords,
+        dto,
+        option,
+      );
+      const newRecords: T[] = oldRecords.map((record) =>
+        Object.assign({}, record, updateDto),
+      );
+      await this.repository.save(newRecords);
+    }
+    const updateDto = await this.actionPreUpdateMany(
+      currentUser,
+      [],
+      dto,
+      option,
+    );
+    await this.repository.update(where, updateDto);
+  }
+
+  async actionPreUpdateMany(currentUser: User, oldRecord: T[], dto, option?) {
+    return dto;
   }
 
   actionPreUpdate(currentUser: User, dto: DeepPartial<T> | T, oldRecord: T) {

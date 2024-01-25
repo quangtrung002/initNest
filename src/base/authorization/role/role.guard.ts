@@ -2,7 +2,7 @@ import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { ROLES_KEY } from './role.decorator';
 import { RoleGroup } from './role.enum';
-import { BadRequestException } from 'src/base/exceptions/custom.exception';
+import { BadRequestException, ForbiddenException } from 'src/base/exceptions/custom.exception';
 
 @Injectable()
 export class RoleGuard implements CanActivate {
@@ -21,7 +21,7 @@ export class RoleGuard implements CanActivate {
       return true;
     }
     if (!RoleGuard.matchRoles(roles, user?.role)) {
-      throw new BadRequestException('Role not access');
+      throw new ForbiddenException('Role not access');
     }
 
     return true;
