@@ -1,9 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { CodeEntity } from '../entities/code.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { DeepPartial, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 import { CodeType } from 'src/base/constants/code.type';
-import { CustomException } from 'src/base/exceptions/custom.exception';
 import { Status } from 'src/base/constants/status';
 import { authenticator } from 'otplib';
 import { ConfigService, config } from 'src/base/configs/config.service';

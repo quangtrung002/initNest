@@ -36,7 +36,6 @@ import { UserService } from '../services/user-self.service';
 
 @ApiTagAndBearer('Admin - Tài khoản người dùng')
 @UseInterceptors(ClassSerializerInterceptor)
-@ApiResponses([{ status: 403, description: 'Access role: Admin' }])
 @Roles(RoleGroup.Admins)
 @Controller('admin/users')
 export class AdminUserController {

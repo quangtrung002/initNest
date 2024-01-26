@@ -1,5 +1,5 @@
 import { IsArray, IsInt, IsNotEmpty, IsPositive } from 'class-validator';
-import { TransformInt } from '../validators/TransformInt.validator';
+import { TransformInt } from '../validators/validator.transformer';
 
 export class IdDto {
   @IsNotEmpty()

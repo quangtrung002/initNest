@@ -1,15 +1,5 @@
-import { HttpException, HttpStatus } from '@nestjs/common';
+import { HttpException } from '@nestjs/common';
 import { HttpStatusCode } from 'axios';
-
-export class CustomException extends HttpException {
-  constructor(
-    message: string,
-    success: boolean = false,
-    statusCode: number = HttpStatus.BAD_REQUEST,
-  ) {
-    super({ success, message }, statusCode);
-  }
-}
 
 export class NotFoundException extends HttpException {
   constructor(message: string = 'Not found') {

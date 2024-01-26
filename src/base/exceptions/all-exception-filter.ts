@@ -12,7 +12,6 @@ export class AllExceptionFilter implements ExceptionFilter {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse();
     const { status, json } = AllExceptionFilter.prepareException(exception);
-    console.log(json);
     let msg: string = '';
     let success: boolean = false;
     if (json['message']) {

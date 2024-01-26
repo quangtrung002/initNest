@@ -15,8 +15,8 @@ export class ListService<T extends BaseEntity> extends GenericService<T> {
   async findAll(currentUser: User, params, isPaginate: boolean): Promise<any> {
     let query = this.prepareFindAllQuery(currentUser, params);
     const pagination = await this.setPagination(query, isPaginate, params);
-    const data = await query.getMany();
-
+    const records = await query.getMany();
+    const data = this.actionPostList(currentUser, records, params);
     return { data, pagination };
   }
 
@@ -58,7 +58,11 @@ export class ListService<T extends BaseEntity> extends GenericService<T> {
     return query;
   }
 
-  prepareFindAllQuery(currentUser, params): SelectQueryBuilder<T> {
+  actionPostList(currentUser : User, records : T[], params){
+    return records;
+  }
+
+  prepareFindAllQuery(currentUser : User, params): SelectQueryBuilder<T> {
     let query = this.repository.createQueryBuilder(this.aliasName);
     query = this.addSelect(query);
     query = this.actionPreList(query, currentUser);

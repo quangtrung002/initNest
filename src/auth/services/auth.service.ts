@@ -1,23 +1,25 @@
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { LoginDto } from '../dtos/login.dto';
 import { Status } from 'src/base/constants/status';
 import {
   BadRequestException,
   NotFoundException,
 } from 'src/base/exceptions/custom.exception';
 import { jwtConstants } from '../constants/jwt.constant';
-import { RegisterDto } from '../dtos/register.dto';
-import { RefreshTokenDto } from '../dtos/refresh-token.dto';
-import { ForgotPasswordDto } from '../dtos/forgot-password.dto';
 import { CodeService } from 'src/app/code/services/code.service';
 import { CodeType } from 'src/base/constants/code.type';
-import { UpdatePasswordDto } from '../dtos/update-password.dto';
-import { ActiveRegisterDto } from '../dtos/active-register.dto';
 import { UserEntity } from 'src/app/user/entities/user.entity';
-import { SendEmailDto } from '../dtos/send-email.dto';
 import { MailService } from 'src/base/mail/mail.service';
 import { UserService } from './user.service';
+import {
+  ActiveRegisterDto,
+  ForgotPasswordDto,
+  LoginDto,
+  RefreshTokenDto,
+  RegisterDto,
+  SendEmailDto,
+  UpdatePasswordDto,
+} from '../dtos/auth.dto';
 
 @Injectable()
 export class AuthService {
@@ -32,7 +34,7 @@ export class AuthService {
     const user: UserEntity = await this.userService.getOneOrNull({ email });
     if (!user) return null;
     const isEqual = user.comparePw(password);
-  
+
     return isEqual ? user : null;
   }
 

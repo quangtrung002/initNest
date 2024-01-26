@@ -2,7 +2,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { UserEntity } from 'src/app/user/entities/user.entity';
 import { Status } from 'src/base/constants/status';
 import { Not, Repository } from 'typeorm';
-import { RegisterDto } from '../dtos/register.dto';
+import { RegisterDto } from '../dtos/auth.dto';
 import { ConflictException } from '@nestjs/common';
 
 export class UserService {

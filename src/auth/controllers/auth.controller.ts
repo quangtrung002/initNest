@@ -7,17 +7,23 @@ import {
   UseInterceptors,
   ClassSerializerInterceptor,
 } from '@nestjs/common';
-import { LoginDto } from '../dtos/login.dto';
+import {
+  ApiLanguageHeader,
+  ApiOperation,
+  ApiTagAndBearer,
+} from 'src/base/swagger/swagger.decorator';
+import {
+  ActiveRegisterDto,
+  ForgotPasswordDto,
+  LoginDto,
+  RefreshTokenDto,
+  RegisterDto,
+  SendEmailDto,
+  UpdatePasswordDto,
+} from '../dtos/auth.dto';
 import { AuthService } from '../services/auth.service';
 import { ApiTags } from '@nestjs/swagger';
-import { RegisterDto } from '../dtos/register.dto';
-import { RefreshTokenDto } from '../dtos/refresh-token.dto';
 import { JwtAuthGuard } from '../guards/jwt-auth.guard';
-import { ForgotPasswordDto } from '../dtos/forgot-password.dto';
-import { UpdatePasswordDto } from '../dtos/update-password.dto';
-import { ActiveRegisterDto } from '../dtos/active-register.dto';
-import { ApiLanguageHeader, ApiOperation, ApiTagAndBearer } from 'src/base/swagger/swagger.decorator';
-import { SendEmailDto } from '../dtos/send-email.dto';
 import { SkipAuth, UserAuth } from '../decorator/jwt.decorator';
 
 @SkipAuth()
@@ -82,11 +88,11 @@ export class AuthController {
   async getProfile(@UserAuth() user): Promise<any> {
     return await user;
   }
-  
+
   @Post('auth/logout')
   @ApiOperation({ summary: 'Đăng xuất' })
   async logout(@UserAuth() user): Promise<any> {
-    console.log(user)
+    console.log(user);
     return await this.authService.logout(user);
   }
 }
