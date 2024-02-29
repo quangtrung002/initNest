@@ -18,17 +18,6 @@ export class ArticleService extends CommonService<ArticleEntity> {
   }
 
   protected aliasName: string = 'articles';
-
-  createEntity(ent) {
-    return this.repoArticle.create(ent);
-  }
-
-  async getOne(id: number): Promise<ArticleEntity> {
-    return await this.repoArticle.findOne({
-      where: { id },
-    });
-  }
-
  
   _filterByUser(
     currentUser: User,
@@ -40,16 +29,6 @@ export class ArticleService extends CommonService<ArticleEntity> {
     });
 
     return queryBuilder;
-  }
-
-  _beforeInsertData(
-    currentUser: User,
-    dto: DeepPartial<ArticleEntity>,
-  ): DeepPartial<ArticleEntity> {
-    return {
-      ...dto,
-      user_id: currentUser.id,
-    };
   }
 
   _beforeUpdateData(

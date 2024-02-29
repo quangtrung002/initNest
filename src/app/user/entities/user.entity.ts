@@ -1,6 +1,5 @@
 import { ApiHideProperty, ApiProperty } from '@nestjs/swagger';
 import { Exclude } from 'class-transformer';
-import { CodeEntity } from 'src/app/code/entities/code.entity';
 import { BaseEntity } from 'src/base/entities/common.entity';
 import { Column, Entity, OneToMany } from 'typeorm';
 import * as bcrypt from 'bcrypt';
@@ -37,10 +36,6 @@ export class UserEntity extends BaseEntity {
   @Exclude()
   @Column({ nullable: true, default: 0 })
   uav?: number;
-
-  @ApiHideProperty()
-  @OneToMany(() => CodeEntity, (codes) => codes.user)
-  codes: CodeEntity[];
 
   @OneToMany(() => ArticleEntity, (articles) => articles.user)
   articles: ArticleEntity[];

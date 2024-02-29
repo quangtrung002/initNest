@@ -3,7 +3,7 @@ import { AuthModule } from './auth/auth.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
 import { UserModule } from './app/user/user.module';
-import { CodeModule } from './app/code/code.module';
+import { CodeModule } from './base/otp/otp.module';
 import { APP_GUARD, APP_PIPE } from '@nestjs/core';
 import { MailModule } from './base/mail/mail.module';
 import { ArticleModule } from './app/article/article.module';

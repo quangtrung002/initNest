@@ -6,7 +6,7 @@ import {
   IsNotEmpty,
   IsPositive,
 } from 'class-validator';
-import { Status } from 'src/base/constants/status';
+import { Status } from 'src/base/utils/status';
 import { factoryQuerySpecificationDto } from 'src/base/dtos/query-specification.dto';
 
 export class AdminLockUserDto {

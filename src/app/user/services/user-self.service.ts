@@ -4,7 +4,7 @@ import { Repository } from 'typeorm';
 import { ChangePasswordDto, SetPasswordDto } from '../dtos/user.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { EntityId } from 'typeorm/repository/EntityId';
-import { Status } from 'src/base/constants/status';
+import { Status } from 'src/base/utils/status';
 import { AUTH_VERSION_DIV } from '../constants/user.constants';
 import { Role } from 'src/base/authorization/role/role.enum';
 

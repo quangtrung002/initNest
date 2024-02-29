@@ -1,6 +1,6 @@
 import { Exclude } from 'class-transformer';
-import { SettingDataType } from 'src/base/constants/setting.enum';
-import { Status } from 'src/base/constants/status';
+import { SettingDataType } from 'src/base/utils/setting.enum';
+import { Status } from 'src/base/utils/status';
 import {
   Column,
   CreateDateColumn,

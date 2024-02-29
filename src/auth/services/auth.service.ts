@@ -1,13 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { Status } from 'src/base/constants/status';
+import { Status } from 'src/base/utils/status';
 import {
   BadRequestException,
   NotFoundException,
 } from 'src/base/exceptions/custom.exception';
 import { jwtConstants } from '../constants/jwt.constant';
-import { CodeService } from 'src/app/code/services/code.service';
-import { CodeType } from 'src/base/constants/code.type';
+import { OtpService } from 'src/base/otp/services/otp.service';
 import { UserEntity } from 'src/app/user/entities/user.entity';
 import { MailService } from 'src/base/mail/mail.service';
 import { UserService } from './user.service';
@@ -26,7 +25,7 @@ export class AuthService {
   constructor(
     private readonly userService: UserService,
     private readonly jwtService: JwtService,
-    private readonly codeService: CodeService,
+    private readonly otpService: OtpService,
     private readonly mailService: MailService,
   ) {}
 
@@ -108,30 +107,27 @@ export class AuthService {
 
   async sendOtp(dto: SendEmailDto) {
     const user = await this.userService.getOneOrNull({ email: dto.email });
-    const otp = await this.codeService.createOtp(
-      user.id,
-      CodeType.REGISTER,
-      'trungbindeptrai',
+    const otp = await this.otpService.createOtp(dto.email + user.uav);
+    await this.mailService.sendMail(
+      dto.email,
+      'Trung bin đẹp trai đã gửi cho bạn một tin nhắn',
+      null,
+      'otp',
+      { otp },
     );
-    this.mailService.sendMail(user.email, 'Trung bin', null, 'otp', { otp });
-
-    return true;
   }
 
   async verifyOtp(dto: ActiveRegisterDto): Promise<any> {
-    const { email, otpCode } = dto;
-
-    const user = await this.userService.getOneOrNull({ email });
+    const user = await this.userService.getOneOrNull({ email: dto.email });
     if (!user) throw new NotFoundException('User not found');
 
-    const code = await this.codeService.getOneOtp(user.id, CodeType.REGISTER);
-    if (!code) throw new NotFoundException('Code not found');
+    const checkOtp = await this.otpService.verifyOTP(
+      dto.otpCode,
+      dto.email + user.uav,
+    );
+    if (!checkOtp) throw new BadRequestException('OTP not correct');
 
-    const isEqual: boolean = code.verifyOtp(otpCode);
-    if (!isEqual) throw new BadRequestException('OTP not correct');
     await this.userService.activeUser(user.id);
-
-    return true;
   }
 
   async refresh(dto: RefreshTokenDto): Promise<any> {
@@ -157,15 +153,15 @@ export class AuthService {
 
   async forgotPassword(dto: ForgotPasswordDto): Promise<any> {
     const user = await this.userService.getOneOrNull({ email: dto.email });
-    const otp = await this.codeService.createOtp(
-      user.id,
-      CodeType.FORGOT_PASSWORD,
-      'trungbindeptrai',
+    const otp = await this.otpService.createOtp(dto.email + user.uav);
+
+    this.mailService.sendMail(
+      dto.email,
+      'Trung bin đẹp trai đã gửi cho bạn một tin nhắn',
+      null,
+      'otp',
+      { otp },
     );
-
-    this.mailService.sendMail(user.email, 'Trung bin', null, 'otp', { otp });
-
-    return true;
   }
 
   async recoverPassword(dto: UpdatePasswordDto): Promise<any> {
@@ -173,12 +169,11 @@ export class AuthService {
     const user = await this.userService.getOneOrNull({ email });
     if (!user) throw new NotFoundException('Email not found');
 
-    const otp = await this.codeService.getOneOtp(
-      user.id,
-      CodeType.FORGOT_PASSWORD,
+    const checkOtp = await this.otpService.verifyOTP(
+      dto.otpCode,
+      dto.email + user.uav,
     );
-    if (!otp.checkExprirationTime())
-      throw new BadRequestException('Otp expriration time');
+    if (!checkOtp) throw new BadRequestException('OTP not correct');
 
     user.hashPw(newPassword);
     user.save();

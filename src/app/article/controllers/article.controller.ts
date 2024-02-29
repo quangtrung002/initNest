@@ -27,7 +27,7 @@ import { ArticleCasl } from '../policies/article.casl';
 import { User } from 'src/auth/interfaces/user.class';
 import { ArticleQueryDto } from '../dtos/article.dto';
 import { Action } from 'src/base/authorization/policy/casl.ability.factory';
-import { subject } from '@casl/ability';
+import { AddUserIdToBody } from 'src/base/decorator/add-user-to-request.decorator';
 
 const articleSelf = 'bài viết cá nhân';
 
@@ -53,6 +53,7 @@ export class ArticleController {
   @Post()
   @ApiCreateOperation({ summary: 'Tạo 1 ' + articleSelf })
   async create(
+    @AddUserIdToBody()
     @UserAuth() user: User,
     @Body() dto: CreateArticleDto,
   ): Promise<any> {

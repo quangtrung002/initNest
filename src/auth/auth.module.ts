@@ -8,7 +8,7 @@ import { JwtStrategy } from './strategies/jwt.strategy';
 import { GoogleStrategy } from './strategies/google.strategy';
 import { FacebookStrategy } from './strategies/facebook.strategy';
 import { UserModule } from '../app/user/user.module';
-import { CodeModule } from '../app/code/code.module';
+import { CodeModule } from '../base/otp/otp.module';
 import { JwtRefreshStrategy } from './strategies/jwt-refresh.strategy';
 import { MailService } from 'src/base/mail/mail.service';
 import { UserService } from './services/user.service';

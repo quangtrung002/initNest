@@ -4,4 +4,4 @@ export const Status = {
   ACTIVE: 1,
   DISABLED: 2,
   INACTIVE: 0,
-};
+}; 

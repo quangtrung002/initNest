@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { SettingEntity } from 'src/app/setting/entities/setting.entity';
-import { SettingDataType } from 'src/base/constants/setting.enum';
+import { SettingDataType } from 'src/base/utils/setting.enum';
 import { Repository } from 'typeorm';
 
 const data = [

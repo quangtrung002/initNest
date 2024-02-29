@@ -3,7 +3,7 @@ import { IsEmail, IsNotEmpty, MaxLength, MinLength } from 'class-validator';
 import { ToLowerCase, Trim } from 'src/base/validators/validator.transformer';
 
 export class EmailUserDto {
-  @ApiProperty({ example: 'example@gmail.com' })
+  @ApiProperty({ example: 'admin@gmail.com' })
   @IsNotEmpty()
   @Trim()
   @ToLowerCase()

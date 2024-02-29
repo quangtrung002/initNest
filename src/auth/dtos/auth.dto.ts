@@ -10,7 +10,7 @@ import { EmailUserDto } from 'src/app/user/dtos/email-user.dto';
 import { PASSWORD_REGEX } from 'src/base/validators/regex/password.regex';
 
 export class ActiveRegisterDto {
-  @ApiProperty({ example: 'example@gmail.com' })
+  @ApiProperty({ example: 'admin@gmail.com' })
   @IsEmail()
   @IsNotEmpty()
   email: string;

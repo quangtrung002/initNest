@@ -11,6 +11,9 @@ export class CreateArticleDto {
   @IsOptional()
   @IsNotEmpty()
   isPublished: boolean = false;
+
+  @IsOptional()
+  user_id : number;
 }
 
 export class UpdateArticleDto extends CreateArticleDto {}

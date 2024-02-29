@@ -3,7 +3,7 @@ import { SettingEntity } from '../entities/setting.entity';
 import { Repository } from 'typeorm';
 import { Injectable } from '@nestjs/common';
 import { SettingDto } from '../dtos/setting.dto';
-import { SettingDataType } from 'src/base/constants/setting.enum';
+import { SettingDataType } from 'src/base/utils/setting.enum';
 import * as _ from 'lodash';
 import { BadRequestException } from 'src/base/exceptions/custom.exception';
 

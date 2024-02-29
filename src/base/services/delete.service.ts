@@ -1,7 +1,7 @@
 import { BaseEntity, DeepPartial, SelectQueryBuilder } from 'typeorm';
 import { CreateOrUpdateService } from './create-or-update.service';
 import { BadRequestException, NotFoundException } from '@nestjs/common';
-import { Status } from '../constants/status';
+import { Status } from '../utils/status';
 import { SuccessException } from '../exceptions/custom.exception';
 
 export class DeleteService<
