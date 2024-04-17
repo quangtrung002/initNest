@@ -4,7 +4,7 @@ import { BaseEntity } from 'src/base/entities/common.entity';
 import { Column, Entity, OneToMany } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 import { AUTH_VERSION_DIV } from '../constants/user.constants';
-import { config } from 'src/base/configs/config.service';
+import { config } from 'src/configs/config.service';
 import { Role } from 'src/base/authorization/role/role.enum';
 import { ArticleEntity } from 'src/app/article/entities/article.entity';
 

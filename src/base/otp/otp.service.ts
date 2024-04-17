@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { authenticator } from 'otplib';
-import { ConfigService } from 'src/base/configs/config.service';
+import { ConfigService } from 'src/configs/config.service';
 
 @Injectable()
 export class OtpService {

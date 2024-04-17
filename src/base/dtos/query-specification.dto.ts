@@ -22,7 +22,7 @@ import {
 
 import { Type as NestType } from '@nestjs/common';
 import { TransformSort } from '../validators/validator.transformer';
-import { config } from '../configs/config.service';
+import { config } from 'src/configs/config.service';
 import * as _ from 'lodash';
 
 export class PaginationSpecificationDto {

@@ -6,7 +6,7 @@ import {
   NotFoundException,
 } from 'src/base/exceptions/custom.exception';
 import { jwtConstants } from '../constants/jwt.constant';
-import { OtpService } from 'src/base/otp/services/otp.service';
+import { OtpService } from 'src/base/otp/otp.service';
 import { UserEntity } from 'src/app/user/entities/user.entity';
 import { MailService } from 'src/base/mail/mail.service';
 import { UserService } from './user.service';

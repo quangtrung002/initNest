@@ -1,6 +1,5 @@
 import { MailerService } from "@nestjs-modules/mailer";
 import { Injectable } from "@nestjs/common";
-import { ConfigService } from "../configs/config.service";
 import { Address } from "@nestjs-modules/mailer/dist/interfaces/send-mail-options.interface";
 
 @Injectable()
