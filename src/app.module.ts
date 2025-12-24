@@ -1,4 +1,4 @@
-import { Module, ValidationPipe } from '@nestjs/common';
+import { Module } from '@nestjs/common';
 import { AuthModule } from './auth/auth.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
@@ -12,6 +12,7 @@ import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
 import { JwtRefreshAuthGuard } from './auth/guards/jwt-refresh-auth.guard';
 import { SeederModule } from './base/migrations/seed/seeder.module';
 import { SettingsModule } from './app/setting/setting.module';
+import { ValidationPipe } from './base/middleware/validation.pipe';
 
 @Module({
   imports: [
