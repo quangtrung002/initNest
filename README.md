@@ -4,3 +4,5 @@ Các bước để chạy được ứng dụng
 - npm i để cài lại cái package
 - run ứng dụng bằng câu lệnh: npm run start:dev
 - Thêm file validation.pipe.ts ở folder middleware và thay import ở file app.module
+- Thêm file function.js ở untils
+- Sửa lại file generic.service.ts để setFilter
